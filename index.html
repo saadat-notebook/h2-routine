@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Class Routine - Dynamic Edition</title>
+<title>Class Routine - Saadat Notebook</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
+    /* --- STYLES (Monochrome Editorial) --- */
     :root {
         --bg-color: #ffffff;
         --ink-color: #000000;
@@ -35,6 +36,8 @@
         gap: 15px;
         flex-wrap: wrap;
         justify-content: center;
+        width: 100%;
+        max-width: 900px;
     }
 
     .btn {
@@ -51,31 +54,13 @@
         transition: all 0.2s;
     }
 
-    .btn:hover {
-        background-color: #fff;
-        color: #000;
-    }
-
-    .btn-outline {
-        background-color: transparent;
-        color: #000;
-    }
-
-    .btn-outline:hover {
-        background-color: #000;
-        color: #fff;
-    }
-
-    .btn-danger {
-        border-color: #d32f2f;
-        color: #d32f2f;
-        background: transparent;
-    }
+    .btn:hover { background-color: #fff; color: #000; }
     
-    .btn-danger:hover {
-        background: #d32f2f;
-        color: white;
-    }
+    .btn-outline { background-color: transparent; color: #000; }
+    .btn-outline:hover { background-color: #000; color: #fff; }
+
+    .btn-danger { border-color: #d32f2f; color: #d32f2f; background: transparent; }
+    .btn-danger:hover { background: #d32f2f; color: white; }
 
     /* The Routine Sheet (VIEW MODE) */
     #routine-sheet {
@@ -85,10 +70,9 @@
         padding: 60px;
         box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         border: 1px solid #e0e0e0;
-        display: block; /* Toggled via JS */
+        display: block; 
     }
 
-    /* Header */
     .sheet-header {
         border-bottom: 4px solid var(--ink-color);
         padding-bottom: 20px;
@@ -98,156 +82,55 @@
         align-items: flex-end;
     }
 
-    h1 {
-        font-size: 32px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: -1px;
-        margin: 0;
-        line-height: 1;
-    }
-
-    .subtitle {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 14px;
-        color: var(--meta-color);
-        text-align: right;
-    }
+    h1 { font-size: 32px; font-weight: 800; text-transform: uppercase; letter-spacing: -1px; margin: 0; line-height: 1; }
+    .subtitle { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--meta-color); text-align: right; }
 
     /* Day Rows */
-    .day-row {
-        display: flex;
-        border-bottom: 1px solid #e5e5e5;
-        padding: 25px 0;
-    }
+    .day-row { display: flex; border-bottom: 1px solid #e5e5e5; padding: 25px 0; }
+    .day-row:last-child { border-bottom: none; }
 
-    .day-row:last-child {
-        border-bottom: none;
-    }
+    .day-label { width: 160px; flex-shrink: 0; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding-top: 4px; }
+    .class-list { flex-grow: 1; display: flex; flex-direction: column; gap: 16px; }
 
-    .day-label {
-        width: 160px;
-        flex-shrink: 0;
-        font-size: 16px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        padding-top: 4px;
-    }
+    .class-item { display: grid; grid-template-columns: 140px 1fr; align-items: baseline; }
+    .time { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--meta-color); }
+    
+    .details { display: flex; flex-direction: column; }
+    .subject { font-weight: 600; font-size: 16px; color: var(--ink-color); }
+    .lecturer { font-size: 13px; color: var(--meta-color); margin-top: 2px; }
 
-    .class-list {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-    }
-
-    /* Individual Class Item */
-    .class-item {
-        display: grid;
-        grid-template-columns: 140px 1fr;
-        align-items: baseline;
-    }
-
-    .time {
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 13px;
-        color: var(--meta-color);
-    }
-
-    .details {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .subject {
-        font-weight: 600;
-        font-size: 16px;
-        color: var(--ink-color);
-    }
-
-    .lecturer {
-        font-size: 13px;
-        color: var(--meta-color);
-        margin-top: 2px;
-    }
-
-    /* Footer */
     .sheet-footer {
-        margin-top: 50px;
-        padding-top: 20px;
-        border-top: 1px solid #000;
-        display: flex;
-        justify-content: space-between;
-        font-family: 'JetBrains Mono', monospace;
-        font-size: 11px;
-        color: var(--meta-color);
-        text-transform: uppercase;
+        margin-top: 50px; padding-top: 20px; border-top: 1px solid #000;
+        display: flex; justify-content: space-between;
+        font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--meta-color); text-transform: uppercase;
     }
 
     /* EDITOR STYLES */
     #editor-container {
-        width: 100%;
-        max-width: 900px;
-        background-color: #fff;
-        padding: 40px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        display: none; /* Hidden by default */
-        border-radius: 8px;
+        width: 100%; max-width: 900px; background-color: #fff; padding: 40px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05); display: none; border-radius: 8px; box-sizing: border-box;
     }
 
-    .editor-day-block {
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 2px dashed #eee;
-    }
+    .editor-day-block { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px dashed #eee; }
+    .editor-day-title { font-size: 18px; font-weight: 800; margin-bottom: 15px; text-transform: uppercase; }
 
-    .editor-day-title {
-        font-size: 18px;
-        font-weight: 800;
-        margin-bottom: 15px;
-        text-transform: uppercase;
-    }
-
-    .editor-row {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 10px;
-        align-items: center;
-    }
-
-    .input-field {
-        padding: 10px;
-        border: 1px solid #ddd;
-        font-family: 'Inter', sans-serif;
-        font-size: 14px;
-    }
+    .editor-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+    
+    .input-field { padding: 10px; border: 1px solid #ddd; font-family: 'Inter', sans-serif; font-size: 14px; background: #fafafa; }
+    .input-field:focus { border-color: #000; outline: none; background: #fff; }
 
     .input-time { width: 120px; font-family: 'JetBrains Mono', monospace; }
     .input-subject { flex-grow: 1; }
     .input-lecturer { width: 180px; }
 
-    .btn-icon {
-        background: #f0f0f0;
-        border: none;
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-        font-weight: bold;
-        color: #555;
-    }
+    .btn-icon { background: #f0f0f0; border: none; width: 34px; height: 34px; cursor: pointer; font-weight: bold; color: #555; border-radius: 4px; }
     .btn-icon:hover { background: #ddd; color: #000; }
     .btn-icon.delete:hover { background: #ffdede; color: #d32f2f; }
 
-    .btn-add-class {
-        font-size: 12px;
-        padding: 5px 10px;
-        background: #f7f7f7;
-        border: 1px solid #ccc;
-        cursor: pointer;
-    }
+    .btn-add-class { font-size: 12px; padding: 8px 12px; background: #f7f7f7; border: 1px solid #ccc; cursor: pointer; font-weight: 600; }
+    .btn-add-class:hover { background: #eee; }
 
-    /* Responsive Mobile View */
+    /* Responsive */
     @media (max-width: 600px) {
         #routine-sheet, #editor-container { padding: 20px; }
         .day-row { flex-direction: column; }
@@ -256,9 +139,9 @@
         .time { margin-bottom: 2px; font-weight: bold; }
         .sheet-header { flex-direction: column; align-items: flex-start; gap: 10px; }
         
-        /* Editor Mobile */
-        .editor-row { flex-direction: column; align-items: stretch; border: 1px solid #eee; padding: 10px; }
-        .input-time, .input-subject, .input-lecturer { width: 100%; box-sizing: border-box; }
+        .editor-row { flex-direction: column; align-items: stretch; border: 1px solid #eee; padding: 10px; background: #f9f9f9; }
+        .input-time, .input-subject, .input-lecturer { width: 100%; box-sizing: border-box; margin-bottom: 5px; }
+        .btn-icon { width: 100%; }
     }
 </style>
 </head>
@@ -269,7 +152,7 @@
         <button id="btn-save" class="btn" style="display:none;" onclick="saveAndClose()">Save Changes</button>
         <button id="btn-cancel" class="btn-danger" style="display:none;" onclick="cancelEdit()">Cancel</button>
         <button class="btn" onclick="downloadRoutine()">Download PNG</button>
-        <button class="btn btn-outline" onclick="resetToDefault()" style="font-size: 10px;">Reset Default</button>
+        <button class="btn btn-outline" onclick="resetToDefault()" style="font-size: 11px; padding: 12px 15px;">Restore Default</button>
     </div>
 
     <!-- VIEW MODE -->
@@ -278,7 +161,7 @@
             <h1>Weekly Schedule</h1>
             <div class="subtitle">
                 HONOURS 2ND YEAR<br>
-                ACADEMIC SESSION 2024-25
+                ACADEMIC SESSION 2023-24
             </div>
         </header>
 
@@ -287,22 +170,23 @@
         </div>
 
         <footer class="sheet-footer">
-            <span>Generated System</span>
-            <span>Local Storage Enabled</span>
+            <span>Saadat Notebook</span>
+            <span id="date-display">Date: ...</span>
         </footer>
     </div>
 
     <!-- EDIT MODE -->
     <div id="editor-container">
         <h2 style="margin-top:0;">Edit Schedule</h2>
-        <p style="color:#666; font-size: 13px; margin-bottom: 20px;">Changes are saved to this device automatically when you click Save.</p>
+        <p style="color:#666; font-size: 13px; margin-bottom: 20px;">Edits are saved automatically when you click "Save Changes".</p>
         <div id="editor-content">
             <!-- Javascript injects forms here -->
         </div>
     </div>
 
     <script>
-        // 1. DEFAULT DATA (The safety net)
+        // --- 1. DATA ---
+        const daysOrder = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
         const defaultRoutine = {
             "Sunday": [
                 { time: "09:00 - 09:45", subject: "Ordinary Differential Equation", lecturer: "Atiqur Rahman" },
@@ -312,65 +196,88 @@
             ],
             "Monday": [
                 { time: "09:00 - 09:45", subject: "Calculus II", lecturer: "Samsun Nahar Rubina" },
-                { time: "09:45 - 10:30", subject: "Calculus II", lecturer: "Ali Azam" },
-                { time: "10:30 - 11:15", subject: "Physics", lecturer: "" }
+                { time: "09:45 - 10:30", subject: "Calculus II", lecturer: "Ali Azam" }
             ],
             "Tuesday": [
                 { time: "09:00 - 09:45", subject: "Calculus II", lecturer: "Samsun Nahar Rubina" },
-                { time: "09:45 - 10:30", subject: "Calculus II", lecturer: "Anju Rani Debnath" },
+                { time: "09:45 - 10:30", subject: "Computer Programming", lecturer: "Muktar Hossain" },
                 { time: "10:30 - 11:15", subject: "Chemistry", lecturer: "" }
             ],
             "Wednesday": [
                 { time: "09:00 - 09:45", subject: "Calculus II", lecturer: "Ali Azam" },
-                { time: "09:45 - 10:30", subject: "Comp. Programming", lecturer: "Muktar Hossain" },
                 { time: "10:30 - 11:15", subject: "Chemistry", lecturer: "" },
                 { time: "11:15 - 12:00", subject: "English (3205)", lecturer: "" }
             ],
             "Thursday": [
-                { time: "09:00 - 09:45", subject: "Comp. Programming", lecturer: "Muktar Hossain" },
+                { time: "09:00 - 09:45", subject: "Computer Programming", lecturer: "Muktar Hossain" },
                 { time: "09:45 - 10:30", subject: "Ordinary Differential Equation", lecturer: "Atiqur Rahman" },
                 { time: "10:30 - 11:15", subject: "Chemistry", lecturer: "" }
             ]
         };
 
-        const daysOrder = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
         let currentRoutine = {};
 
-        // 2. INITIALIZATION
+        // --- 2. INITIALIZATION ---
         window.onload = function() {
             loadData();
+            updateDate();
             renderView();
         };
 
+        function updateDate() {
+            const dateEl = document.getElementById('date-display');
+            const now = new Date();
+            // Format: Dec 07, 2025
+            const options = { year: 'numeric', month: 'short', day: '2-digit' };
+            dateEl.innerText = "Generated: " + now.toLocaleDateString('en-US', options);
+        }
+
         function loadData() {
-            const stored = localStorage.getItem('myClassRoutine');
+            const stored = localStorage.getItem('myClassRoutine_v2');
             if (stored) {
-                currentRoutine = JSON.parse(stored);
+                try {
+                    currentRoutine = JSON.parse(stored);
+                } catch(e) {
+                    console.error("Data corrupted, resetting", e);
+                    currentRoutine = JSON.parse(JSON.stringify(defaultRoutine));
+                }
             } else {
-                currentRoutine = JSON.parse(JSON.stringify(defaultRoutine)); // Deep copy
+                currentRoutine = JSON.parse(JSON.stringify(defaultRoutine));
             }
+        }
+
+        function saveData() {
+            localStorage.setItem('myClassRoutine_v2', JSON.stringify(currentRoutine));
         }
 
         function resetToDefault() {
-            if(confirm("Are you sure? This will delete your custom changes.")) {
-                localStorage.removeItem('myClassRoutine');
+            if(confirm("Are you sure? This will delete all your edits and restore the original.")) {
+                localStorage.removeItem('myClassRoutine_v2');
                 loadData();
                 renderView();
+                if(document.getElementById('editor-container').style.display === 'block') {
+                    cancelEdit();
+                }
             }
         }
 
-        // 3. RENDER THE VIEW (Monochrome Style)
+        // --- 3. VIEW MODE RENDERING ---
         function renderView() {
             const container = document.getElementById('routine-content');
             container.innerHTML = '';
+            
+            // Re-update date whenever we render view (in case days passed while tab was open)
+            updateDate();
 
             daysOrder.forEach(day => {
-                if (!currentRoutine[day]) return;
+                if (!currentRoutine[day] || currentRoutine[day].length === 0) return;
 
                 const classes = currentRoutine[day];
                 let classHTML = '';
 
                 classes.forEach(cls => {
+                    if(!cls.subject) return;
+                    
                     const lecturerHtml = cls.lecturer ? `<span class="lecturer">— ${cls.lecturer}</span>` : '';
                     classHTML += `
                         <div class="class-item">
@@ -395,12 +302,11 @@
             });
         }
 
-        // 4. EDITOR FUNCTIONS
+        // --- 4. EDITOR LOGIC ---
         function toggleEditMode() {
             document.getElementById('routine-sheet').style.display = 'none';
             document.getElementById('editor-container').style.display = 'block';
             
-            // Buttons
             document.getElementById('btn-edit').style.display = 'none';
             document.getElementById('btn-save').style.display = 'inline-block';
             document.getElementById('btn-cancel').style.display = 'inline-block';
@@ -417,12 +323,25 @@
                 
                 let rows = '';
                 classes.forEach((cls, index) => {
+                    const safeTime = cls.time.replace(/"/g, '&quot;');
+                    const safeSubj = cls.subject.replace(/"/g, '&quot;');
+                    const safeLect = cls.lecturer.replace(/"/g, '&quot;');
+
                     rows += `
-                        <div class="editor-row" data-day="${day}" data-index="${index}">
-                            <input type="text" class="input-field input-time" value="${cls.time}" placeholder="Time">
-                            <input type="text" class="input-field input-subject" value="${cls.subject}" placeholder="Subject">
-                            <input type="text" class="input-field input-lecturer" value="${cls.lecturer}" placeholder="Lecturer (Optional)">
-                            <button class="btn-icon delete" onclick="deleteClass('${day}', ${index})">×</button>
+                        <div class="editor-row">
+                            <input type="text" class="input-field input-time" 
+                                   value="${safeTime}" placeholder="Time"
+                                   oninput="updateEntry('${day}', ${index}, 'time', this.value)">
+                                   
+                            <input type="text" class="input-field input-subject" 
+                                   value="${safeSubj}" placeholder="Subject"
+                                   oninput="updateEntry('${day}', ${index}, 'subject', this.value)">
+                                   
+                            <input type="text" class="input-field input-lecturer" 
+                                   value="${safeLect}" placeholder="Lecturer"
+                                   oninput="updateEntry('${day}', ${index}, 'lecturer', this.value)">
+                                   
+                            <button class="btn-icon delete" onclick="deleteClass('${day}', ${index})" title="Delete">×</button>
                         </div>
                     `;
                 });
@@ -430,7 +349,7 @@
                 const blockHtml = `
                     <div class="editor-day-block">
                         <div class="editor-day-title">${day}</div>
-                        <div id="rows-${day}">${rows}</div>
+                        <div>${rows}</div>
                         <button class="btn-add-class" onclick="addClass('${day}')">+ Add Class</button>
                     </div>
                 `;
@@ -438,10 +357,16 @@
             });
         }
 
+        function updateEntry(day, index, field, val) {
+            if(currentRoutine[day] && currentRoutine[day][index]) {
+                currentRoutine[day][index][field] = val;
+            }
+        }
+
         function addClass(day) {
             if(!currentRoutine[day]) currentRoutine[day] = [];
-            currentRoutine[day].push({ time: "00:00 - 00:00", subject: "New Subject", lecturer: "" });
-            renderEditor(); // Re-render to show new input
+            currentRoutine[day].push({ time: "00:00 - 00:00", subject: "New Class", lecturer: "" });
+            renderEditor();
         }
 
         function deleteClass(day, index) {
@@ -450,34 +375,9 @@
         }
 
         function saveAndClose() {
-            // Scrape data from inputs
-            daysOrder.forEach(day => {
-                const rowContainer = document.getElementById(`rows-${day}`);
-                if(!rowContainer) return;
-                
-                const rows = rowContainer.querySelectorAll('.editor-row');
-                const newClasses = [];
-
-                rows.forEach(row => {
-                    const time = row.querySelector('.input-time').value;
-                    const subject = row.querySelector('.input-subject').value;
-                    const lecturer = row.querySelector('.input-lecturer').value;
-
-                    if(subject.trim() !== "") { // Only save if subject exists
-                        newClasses.push({ time, subject, lecturer });
-                    }
-                });
-                
-                // Sort by time? No, let user order them manually for flexibility
-                currentRoutine[day] = newClasses;
-            });
-
-            // Save to LocalStorage
-            localStorage.setItem('myClassRoutine', JSON.stringify(currentRoutine));
-
-            // Switch UI back
+            saveData();
             cancelEdit();
-            renderView(); // Refresh view
+            renderView();
         }
 
         function cancelEdit() {
@@ -488,20 +388,16 @@
             document.getElementById('btn-save').style.display = 'none';
             document.getElementById('btn-cancel').style.display = 'none';
             
-            // Reload data in case they canceled mid-edit
             loadData();
         }
 
-        // 5. DOWNLOAD FUNCTION (Same as before)
+        // --- 5. EXPORT ---
         function downloadRoutine() {
             const element = document.getElementById('routine-sheet');
-            // Ensure element is visible before capturing
             if (element.style.display === 'none') {
-                alert("Please exit Edit Mode before downloading.");
+                alert("Please click 'Save Changes' before downloading.");
                 return;
             }
-
-            const button = document.querySelector('.btn'); // Target the download button roughly
             
             html2canvas(element, {
                 scale: 4, 
@@ -510,7 +406,7 @@
                 windowWidth: 1400 
             }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = 'My-Routine.png';
+                link.download = 'Routine_SaadatNotebook.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             });
