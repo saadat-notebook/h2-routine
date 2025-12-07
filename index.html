@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Class Routine - Monochrome Editorial</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+    :root {
+        --bg-color: #ffffff;
+        --ink-color: #000000;
+        --line-color: #000000;
+        --meta-color: #555555;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #f3f3f3; /* Light gray background for the browser, white for the routine */
+        margin: 0;
+        padding: 40px 20px;
+        color: var(--ink-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    /* Controls */
+    .controls {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .btn-download {
+        background-color: #000;
+        color: #fff;
+        border: 1px solid #000;
+        padding: 14px 28px;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-download:hover {
+        background-color: #fff;
+        color: #000;
+    }
+
+    /* The Routine Sheet */
+    #routine-sheet {
+        width: 100%;
+        max-width: 900px;
+        background-color: var(--bg-color);
+        padding: 60px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        border: 1px solid #e0e0e0;
+    }
+
+    /* Header */
+    .sheet-header {
+        border-bottom: 4px solid var(--ink-color);
+        padding-bottom: 20px;
+        margin-bottom: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    h1 {
+        font-size: 32px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+        margin: 0;
+        line-height: 1;
+    }
+
+    .subtitle {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 14px;
+        color: var(--meta-color);
+        text-align: right;
+    }
+
+    /* Day Rows */
+    .day-row {
+        display: flex;
+        border-bottom: 1px solid #e5e5e5;
+        padding: 25px 0;
+    }
+
+    .day-row:last-child {
+        border-bottom: none;
+    }
+
+    .day-label {
+        width: 160px;
+        flex-shrink: 0;
+        font-size: 16px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding-top: 4px; /* Align with first line of text */
+    }
+
+    .class-list {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    /* Individual Class Item */
+    .class-item {
+        display: grid;
+        grid-template-columns: 140px 1fr;
+        align-items: baseline;
+    }
+
+    .time {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        color: var(--meta-color);
+    }
+
+    .details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .subject {
+        font-weight: 600;
+        font-size: 16px;
+        color: var(--ink-color);
+    }
+
+    .lecturer {
+        font-size: 13px;
+        color: var(--meta-color);
+        margin-top: 2px;
+    }
+
+    .lecturer::before {
+        content: "— ";
+    }
+
+    /* Footer */
+    .sheet-footer {
+        margin-top: 50px;
+        padding-top: 20px;
+        border-top: 1px solid #000;
+        display: flex;
+        justify-content: space-between;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        color: var(--meta-color);
+        text-transform: uppercase;
+    }
+
+    /* Responsive Mobile View */
+    @media (max-width: 600px) {
+        #routine-sheet {
+            padding: 20px;
+        }
+        .day-row {
+            flex-direction: column;
+        }
+        .day-label {
+            margin-bottom: 15px;
+            font-size: 20px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 5px;
+            width: 100%;
+        }
+        .class-item {
+            grid-template-columns: 1fr; /* Stack time and subject */
+            margin-bottom: 10px;
+        }
+        .time {
+            margin-bottom: 2px;
+            font-weight: bold;
+        }
+        .sheet-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+    }
+</style>
+</head>
+<body>
+
+    <div class="controls">
+        <button class="btn-download" onclick="downloadRoutine()">
+            Download High-Res PNG
+        </button>
+    </div>
+
+    <!-- The Minimalist Sheet -->
+    <div id="routine-sheet">
+        
+        <header class="sheet-header">
+            <h1>Weekly Schedule</h1>
+            <div class="subtitle">
+                HONOURS 2ND YEAR<br>
+                ACADEMIC SESSION 2024-25
+            </div>
+        </header>
+
+        <!-- Sunday -->
+        <div class="day-row">
+            <div class="day-label">Sunday</div>
+            <div class="class-list">
+                <div class="class-item">
+                    <span class="time">09:00 - 09:45</span>
+                    <div class="details">
+                        <span class="subject">Ordinary Differential Equation</span>
+                        <span class="lecturer">Atiqur Rahman</span>
+                    </div>
+                </div>
+                <div class="class-item">
+                    <span class="time">09:45 - 10:30</span>
+                    <div class="details">
+                        <span class="subject">Calculus II</span>
+                        <span class="lecturer">Samsun Nahar Rubina</span>
+                    </div>
+                </div>
+                <div class="class-item">
+                    <span class="time">10:30 - 11:15</span>
+                    <div class="details">
+                        <span class="subject">Physics</span>
+                    </div>
+                </div>
+                <div class="class-item">
+                    <span class="time">14:00 - 15:20</span>
+                    <div class="details">
+                        <span class="subject">Library Work</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monday -->
+        <div class="day-row">
+            <div class="day-label">Monday</div>
+            <div class="class-list">
+                <div class="class-item">
+                    <span class="time">09:00 - 09:45</span>
+                    <div class="details">
+                        <span class="subject">Calculus II</span>
+                        <span class="lecturer">Samsun Nahar Rubina</span>
+                    </div>
+                </div>
+                <div class="class-item">
+                    <span class="time">09:45 - 10:30</span>
+                    <div class="details">
+                        <span class="subject">Calculus II</span>
+                        <span class="lecturer">Ali Azam</span>
+                    </div>
+                </div>
+                <div class="class-item">
+                    <span class="time">10:30 - 11:15</span>
+                    <div class="details">
+                        <span class="subject">Physics</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tuesday -->
+        <div class="day-row">
+            <div class="day-label">Tuesday</div>
+            <div class="class-list">
+                <div class="class-item">
+                    <span class="time">09:00 - 09:45</span>
+                    <div class="details">
+                        <span class="subject">Calculus II</span>
+                        <span class="lecturer">Samsun Nahar Rubina</span>
+                    </div>
+                </div>
+                <div class="class-item">
+                    <span class="time">09:45 - 10:30</span>
+                    <div class="details">
+                        <span class="subject">Calculus II</span>
+                        <span class="lecturer">Anju Rani Debnath</span>
+                    </div>
+                </div>
+                <div class="class-item">
+                    <span class="time">10:30 - 11:15</span>
+                    <div class="details">
+                        <span class="subject">Chemistry</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wednesday -->
+        <div class="day-row">
+            <div class="day-label">Wednesday</div>
+            <div class="class-list">
+                <div class="class-item">
+                    <span class="time">09:00 - 09:45</span>
+                    <div class="details">
+                        <span class="subject">Calculus II</span>
+                        <span class="lecturer">Ali Azam</span>
+                    </div>
+                </div>
+                <div class="class-item">
+                    <span class="time">09:45 - 10:30</span>
+                    <div class="details">
+                        <span class="subject">Comp. Programming</span>
+                        <span class="lecturer">Muktar Hossain</span>
+                    </div>
+                </div>
+                <div class="class-item">
+                    <span class="time">10:30 - 11:15</span>
+                    <div class="details">
+                        <span class="subject">Chemistry</span>
+                    </div>
+                </div>
+                <div class="class-item">
+                    <span class="time">11:15 - 12:00</span>
+                    <div class="details">
+                        <span class="subject">English (3205)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thursday -->
+        <div class="day-row">
+            <div class="day-label">Thursday</div>
+            <div class="class-list">
+                <div class="class-item">
+                    <span class="time">09:00 - 09:45</span>
+                    <div class="details">
+                        <span class="subject">Comp. Programming</span>
+                        <span class="lecturer">Muktar Hossain</span>
+                    </div>
+                </div>
+                <div class="class-item">
+                    <span class="time">09:45 - 10:30</span>
+                    <div class="details">
+                        <span class="subject">Ordinary Differential Equation</span>
+                        <span class="lecturer">Atiqur Rahman</span>
+                    </div>
+                </div>
+                <div class="class-item">
+                    <span class="time">10:30 - 11:15</span>
+                    <div class="details">
+                        <span class="subject">Chemistry</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="sheet-footer">
+            <span>Generated System</span>
+            <span>Date: 2024</span>
+        </footer>
+
+    </div>
+
+    <script>
+        function downloadRoutine() {
+            const element = document.getElementById('routine-sheet');
+            const button = document.querySelector('.btn-download');
+            
+            button.innerHTML = "PROCESSING...";
+            button.style.opacity = "0.7";
+            
+            setTimeout(() => {
+                html2canvas(element, {
+                    scale: 4, // Ultra High Quality
+                    useCORS: true,
+                    backgroundColor: "#ffffff",
+                    windowWidth: 1400 // Force desktop width for the image
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = 'Routine-Monochrome.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    
+                    button.innerHTML = "DOWNLOAD HIGH-RES PNG";
+                    button.style.opacity = "1";
+                });
+            }, 100);
+        }
+    </script>
+</body>
+</html>
