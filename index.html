@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Class Routine - Dynamic Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+    :root {
+        --bg-color: #ffffff;
+        --ink-color: #000000;
+        --line-color: #000000;
+        --meta-color: #555555;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background: #f3f3f3;
+        margin: 0;
+        padding: 40px 20px;
+        color: var(--ink-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    /* Controls */
+    .controls {
+        margin-bottom: 30px;
+        text-align: center;
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .btn {
+        background-color: #000;
+        color: #fff;
+        border: 1px solid #000;
+        padding: 12px 24px;
+        font-family: 'Inter', sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn:hover {
+        background-color: #fff;
+        color: #000;
+    }
+
+    .btn-outline {
+        background-color: transparent;
+        color: #000;
+    }
+
+    .btn-outline:hover {
+        background-color: #000;
+        color: #fff;
+    }
+
+    .btn-danger {
+        border-color: #d32f2f;
+        color: #d32f2f;
+        background: transparent;
+    }
+    
+    .btn-danger:hover {
+        background: #d32f2f;
+        color: white;
+    }
+
+    /* The Routine Sheet (VIEW MODE) */
+    #routine-sheet {
+        width: 100%;
+        max-width: 900px;
+        background-color: var(--bg-color);
+        padding: 60px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        border: 1px solid #e0e0e0;
+        display: block; /* Toggled via JS */
+    }
+
+    /* Header */
+    .sheet-header {
+        border-bottom: 4px solid var(--ink-color);
+        padding-bottom: 20px;
+        margin-bottom: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    h1 {
+        font-size: 32px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: -1px;
+        margin: 0;
+        line-height: 1;
+    }
+
+    .subtitle {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 14px;
+        color: var(--meta-color);
+        text-align: right;
+    }
+
+    /* Day Rows */
+    .day-row {
+        display: flex;
+        border-bottom: 1px solid #e5e5e5;
+        padding: 25px 0;
+    }
+
+    .day-row:last-child {
+        border-bottom: none;
+    }
+
+    .day-label {
+        width: 160px;
+        flex-shrink: 0;
+        font-size: 16px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding-top: 4px;
+    }
+
+    .class-list {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    /* Individual Class Item */
+    .class-item {
+        display: grid;
+        grid-template-columns: 140px 1fr;
+        align-items: baseline;
+    }
+
+    .time {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 13px;
+        color: var(--meta-color);
+    }
+
+    .details {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .subject {
+        font-weight: 600;
+        font-size: 16px;
+        color: var(--ink-color);
+    }
+
+    .lecturer {
+        font-size: 13px;
+        color: var(--meta-color);
+        margin-top: 2px;
+    }
+
+    /* Footer */
+    .sheet-footer {
+        margin-top: 50px;
+        padding-top: 20px;
+        border-top: 1px solid #000;
+        display: flex;
+        justify-content: space-between;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        color: var(--meta-color);
+        text-transform: uppercase;
+    }
+
+    /* EDITOR STYLES */
+    #editor-container {
+        width: 100%;
+        max-width: 900px;
+        background-color: #fff;
+        padding: 40px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        display: none; /* Hidden by default */
+        border-radius: 8px;
+    }
+
+    .editor-day-block {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px dashed #eee;
+    }
+
+    .editor-day-title {
+        font-size: 18px;
+        font-weight: 800;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+    }
+
+    .editor-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        align-items: center;
+    }
+
+    .input-field {
+        padding: 10px;
+        border: 1px solid #ddd;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+    }
+
+    .input-time { width: 120px; font-family: 'JetBrains Mono', monospace; }
+    .input-subject { flex-grow: 1; }
+    .input-lecturer { width: 180px; }
+
+    .btn-icon {
+        background: #f0f0f0;
+        border: none;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        font-weight: bold;
+        color: #555;
+    }
+    .btn-icon:hover { background: #ddd; color: #000; }
+    .btn-icon.delete:hover { background: #ffdede; color: #d32f2f; }
+
+    .btn-add-class {
+        font-size: 12px;
+        padding: 5px 10px;
+        background: #f7f7f7;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+    /* Responsive Mobile View */
+    @media (max-width: 600px) {
+        #routine-sheet, #editor-container { padding: 20px; }
+        .day-row { flex-direction: column; }
+        .day-label { margin-bottom: 15px; font-size: 20px; border-bottom: 1px solid #000; padding-bottom: 5px; width: 100%; }
+        .class-item { grid-template-columns: 1fr; margin-bottom: 10px; }
+        .time { margin-bottom: 2px; font-weight: bold; }
+        .sheet-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+        
+        /* Editor Mobile */
+        .editor-row { flex-direction: column; align-items: stretch; border: 1px solid #eee; padding: 10px; }
+        .input-time, .input-subject, .input-lecturer { width: 100%; box-sizing: border-box; }
+    }
+</style>
+</head>
+<body>
+
+    <div class="controls">
+        <button id="btn-edit" class="btn btn-outline" onclick="toggleEditMode()">Edit Routine</button>
+        <button id="btn-save" class="btn" style="display:none;" onclick="saveAndClose()">Save Changes</button>
+        <button id="btn-cancel" class="btn-danger" style="display:none;" onclick="cancelEdit()">Cancel</button>
+        <button class="btn" onclick="downloadRoutine()">Download PNG</button>
+        <button class="btn btn-outline" onclick="resetToDefault()" style="font-size: 10px;">Reset Default</button>
+    </div>
+
+    <!-- VIEW MODE -->
+    <div id="routine-sheet">
+        <header class="sheet-header">
+            <h1>Weekly Schedule</h1>
+            <div class="subtitle">
+                HONOURS 2ND YEAR<br>
+                ACADEMIC SESSION 2024-25
+            </div>
+        </header>
+
+        <div id="routine-content">
+            <!-- Javascript injects rows here -->
+        </div>
+
+        <footer class="sheet-footer">
+            <span>Generated System</span>
+            <span>Local Storage Enabled</span>
+        </footer>
+    </div>
+
+    <!-- EDIT MODE -->
+    <div id="editor-container">
+        <h2 style="margin-top:0;">Edit Schedule</h2>
+        <p style="color:#666; font-size: 13px; margin-bottom: 20px;">Changes are saved to this device automatically when you click Save.</p>
+        <div id="editor-content">
+            <!-- Javascript injects forms here -->
+        </div>
+    </div>
+
+    <script>
+        // 1. DEFAULT DATA (The safety net)
+        const defaultRoutine = {
+            "Sunday": [
+                { time: "09:00 - 09:45", subject: "Ordinary Differential Equation", lecturer: "Atiqur Rahman" },
+                { time: "09:45 - 10:30", subject: "Calculus II", lecturer: "Samsun Nahar Rubina" },
+                { time: "10:30 - 11:15", subject: "Physics", lecturer: "" },
+                { time: "14:00 - 15:20", subject: "Library Work", lecturer: "" }
+            ],
+            "Monday": [
+                { time: "09:00 - 09:45", subject: "Calculus II", lecturer: "Samsun Nahar Rubina" },
+                { time: "09:45 - 10:30", subject: "Calculus II", lecturer: "Ali Azam" },
+                { time: "10:30 - 11:15", subject: "Physics", lecturer: "" }
+            ],
+            "Tuesday": [
+                { time: "09:00 - 09:45", subject: "Calculus II", lecturer: "Samsun Nahar Rubina" },
+                { time: "09:45 - 10:30", subject: "Calculus II", lecturer: "Anju Rani Debnath" },
+                { time: "10:30 - 11:15", subject: "Chemistry", lecturer: "" }
+            ],
+            "Wednesday": [
+                { time: "09:00 - 09:45", subject: "Calculus II", lecturer: "Ali Azam" },
+                { time: "09:45 - 10:30", subject: "Comp. Programming", lecturer: "Muktar Hossain" },
+                { time: "10:30 - 11:15", subject: "Chemistry", lecturer: "" },
+                { time: "11:15 - 12:00", subject: "English (3205)", lecturer: "" }
+            ],
+            "Thursday": [
+                { time: "09:00 - 09:45", subject: "Comp. Programming", lecturer: "Muktar Hossain" },
+                { time: "09:45 - 10:30", subject: "Ordinary Differential Equation", lecturer: "Atiqur Rahman" },
+                { time: "10:30 - 11:15", subject: "Chemistry", lecturer: "" }
+            ]
+        };
+
+        const daysOrder = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
+        let currentRoutine = {};
+
+        // 2. INITIALIZATION
+        window.onload = function() {
+            loadData();
+            renderView();
+        };
+
+        function loadData() {
+            const stored = localStorage.getItem('myClassRoutine');
+            if (stored) {
+                currentRoutine = JSON.parse(stored);
+            } else {
+                currentRoutine = JSON.parse(JSON.stringify(defaultRoutine)); // Deep copy
+            }
+        }
+
+        function resetToDefault() {
+            if(confirm("Are you sure? This will delete your custom changes.")) {
+                localStorage.removeItem('myClassRoutine');
+                loadData();
+                renderView();
+            }
+        }
+
+        // 3. RENDER THE VIEW (Monochrome Style)
+        function renderView() {
+            const container = document.getElementById('routine-content');
+            container.innerHTML = '';
+
+            daysOrder.forEach(day => {
+                if (!currentRoutine[day]) return;
+
+                const classes = currentRoutine[day];
+                let classHTML = '';
+
+                classes.forEach(cls => {
+                    const lecturerHtml = cls.lecturer ? `<span class="lecturer">— ${cls.lecturer}</span>` : '';
+                    classHTML += `
+                        <div class="class-item">
+                            <span class="time">${cls.time}</span>
+                            <div class="details">
+                                <span class="subject">${cls.subject}</span>
+                                ${lecturerHtml}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                const rowHtml = `
+                    <div class="day-row">
+                        <div class="day-label">${day}</div>
+                        <div class="class-list">
+                            ${classHTML}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += rowHtml;
+            });
+        }
+
+        // 4. EDITOR FUNCTIONS
+        function toggleEditMode() {
+            document.getElementById('routine-sheet').style.display = 'none';
+            document.getElementById('editor-container').style.display = 'block';
+            
+            // Buttons
+            document.getElementById('btn-edit').style.display = 'none';
+            document.getElementById('btn-save').style.display = 'inline-block';
+            document.getElementById('btn-cancel').style.display = 'inline-block';
+
+            renderEditor();
+        }
+
+        function renderEditor() {
+            const container = document.getElementById('editor-content');
+            container.innerHTML = '';
+
+            daysOrder.forEach(day => {
+                const classes = currentRoutine[day] || [];
+                
+                let rows = '';
+                classes.forEach((cls, index) => {
+                    rows += `
+                        <div class="editor-row" data-day="${day}" data-index="${index}">
+                            <input type="text" class="input-field input-time" value="${cls.time}" placeholder="Time">
+                            <input type="text" class="input-field input-subject" value="${cls.subject}" placeholder="Subject">
+                            <input type="text" class="input-field input-lecturer" value="${cls.lecturer}" placeholder="Lecturer (Optional)">
+                            <button class="btn-icon delete" onclick="deleteClass('${day}', ${index})">×</button>
+                        </div>
+                    `;
+                });
+
+                const blockHtml = `
+                    <div class="editor-day-block">
+                        <div class="editor-day-title">${day}</div>
+                        <div id="rows-${day}">${rows}</div>
+                        <button class="btn-add-class" onclick="addClass('${day}')">+ Add Class</button>
+                    </div>
+                `;
+                container.innerHTML += blockHtml;
+            });
+        }
+
+        function addClass(day) {
+            if(!currentRoutine[day]) currentRoutine[day] = [];
+            currentRoutine[day].push({ time: "00:00 - 00:00", subject: "New Subject", lecturer: "" });
+            renderEditor(); // Re-render to show new input
+        }
+
+        function deleteClass(day, index) {
+            currentRoutine[day].splice(index, 1);
+            renderEditor();
+        }
+
+        function saveAndClose() {
+            // Scrape data from inputs
+            daysOrder.forEach(day => {
+                const rowContainer = document.getElementById(`rows-${day}`);
+                if(!rowContainer) return;
+                
+                const rows = rowContainer.querySelectorAll('.editor-row');
+                const newClasses = [];
+
+                rows.forEach(row => {
+                    const time = row.querySelector('.input-time').value;
+                    const subject = row.querySelector('.input-subject').value;
+                    const lecturer = row.querySelector('.input-lecturer').value;
+
+                    if(subject.trim() !== "") { // Only save if subject exists
+                        newClasses.push({ time, subject, lecturer });
+                    }
+                });
+                
+                // Sort by time? No, let user order them manually for flexibility
+                currentRoutine[day] = newClasses;
+            });
+
+            // Save to LocalStorage
+            localStorage.setItem('myClassRoutine', JSON.stringify(currentRoutine));
+
+            // Switch UI back
+            cancelEdit();
+            renderView(); // Refresh view
+        }
+
+        function cancelEdit() {
+            document.getElementById('routine-sheet').style.display = 'block';
+            document.getElementById('editor-container').style.display = 'none';
+            
+            document.getElementById('btn-edit').style.display = 'inline-block';
+            document.getElementById('btn-save').style.display = 'none';
+            document.getElementById('btn-cancel').style.display = 'none';
+            
+            // Reload data in case they canceled mid-edit
+            loadData();
+        }
+
+        // 5. DOWNLOAD FUNCTION (Same as before)
+        function downloadRoutine() {
+            const element = document.getElementById('routine-sheet');
+            // Ensure element is visible before capturing
+            if (element.style.display === 'none') {
+                alert("Please exit Edit Mode before downloading.");
+                return;
+            }
+
+            const button = document.querySelector('.btn'); // Target the download button roughly
+            
+            html2canvas(element, {
+                scale: 4, 
+                useCORS: true,
+                backgroundColor: "#ffffff",
+                windowWidth: 1400 
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'My-Routine.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
